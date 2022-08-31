@@ -32,6 +32,7 @@ species_lookup <- read.csv("../Colombia_rangeLims/data/initial_species_list.csv"
 # all paramo points, not pasture). According to Edicson, CHA10D-12D never got 
 # vegetation done, and CHA22 is 0ESP 22SHR. 
 pbd2 <- paramo_bird_data %>% 
+    left_join(., species_lookup) %>%
     left_join(., veg_data) %>%
     mutate(habitat_type = substr(point, 3, 3), 
            habitat_type = case_when(point %in% paste0("BEA", 10:12) ~ "P", 
