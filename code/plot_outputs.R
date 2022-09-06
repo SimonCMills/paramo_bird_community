@@ -47,9 +47,11 @@ fits_esp_summ <- tibble(estimate = matrixStats::rowMeans2(fits_esp),
 
 ## plot ----
 p1 <- ggplot(fits_esp_summ, aes(elev_ALOS, estimate)) + 
+    geom_point(data=veg_data, aes(y=abu_espeletia, fill=habitat_type), pch=21, 
+               alpha=.3, size=2) +
+    geom_point(data=veg_data, aes(y=abu_espeletia), pch=21, col="black", size=2) +
     geom_line(aes(col=factor(habitat_type))) +
     geom_ribbon(aes(ymin=lwr, ymax = upr, fill=factor(habitat_type)), alpha=.2) +
-    geom_point(data=veg_data, aes(y=abu_espeletia, col=habitat_type)) +
     theme_bw() + 
     theme(panel.grid = element_blank(), 
           axis.text = element_text(colour="black"), 
@@ -60,9 +62,11 @@ p1 <- ggplot(fits_esp_summ, aes(elev_ALOS, estimate)) +
     labs(x = "", y = "Espeletia abundance")
 
 p2 <- ggplot(fits_shr_summ, aes(elev_ALOS, estimate)) + 
+    geom_point(data=veg_data, aes(y=abu_shrub, fill=habitat_type), pch=21, 
+               alpha=.3, size=2) +
+    geom_point(data=veg_data, aes(y=abu_shrub), pch=21, col="black", size=2) +
     geom_line(aes(col=factor(habitat_type))) +
     geom_ribbon(aes(ymin=lwr, ymax = upr, fill=factor(habitat_type)), alpha=.3) +
-    geom_point(data=veg_data, aes(y=abu_shrub, col=habitat_type)) +
     theme_bw() + 
     theme(panel.grid = element_blank(), 
           axis.text = element_text(colour="black")) +
@@ -72,8 +76,8 @@ p2 <- ggplot(fits_shr_summ, aes(elev_ALOS, estimate)) +
     labs(x = "Elevation (m.a.s.l.)", y = "Shrub abundance")
 
 p_both <- egg::ggarrange(p1, p2, ncol=1)
-ggsave("figures/plot_vegetation.png", plot = p_both, width=100, 
-       height = 150, dpi=400, units="mm")
+ggsave("figures/plot_vegetation.png", plot = p_both, width=100*1.2, 
+       height = 150*1.2, dpi=400, units="mm")
 
 # predictions ----
 shr_center <- attributes(cov$abu_shrub_sc)$`scaled:center`
@@ -133,7 +137,7 @@ occ_preds <- left_join(pred_occupancy_df, coef_occ_df) %>%
 #     ggplot(aes(elev_sc, SR, col=factor(habitat_sc), group=interaction(habitat_sc, draw))) +
 #     geom_line()
 
-## summarise occ ----
+## SR plots ----
 occ_summ <- occ_preds %>%
     group_by(elev_ALOS, habitat_sc, draw) %>%
     summarise(SR = sum(p)) %>%
@@ -179,7 +183,7 @@ p2 <- ggplot(occ_summ, aes(elev_ALOS, estimate_diff, ymin = lwr_diff, ymax = upr
 
 p_both <- egg::ggarrange(p1, p2, ncol=1, heights = c(1, .5))
 ggsave("figures/plot_species_richness.png", plot = p_both, 
-       width=100, height = 120, dpi=400, units="mm")
+       width=100*1.2, height = 120*1.2, dpi=400, units="mm")
 
 # coefficient plot ----
 ## fixed effects ----
@@ -259,4 +263,4 @@ p4 <- ggplot(feffs_esp, aes(mid, "Average")) + geom_point() +
 
 p_both <- egg::ggarrange(p1, p2, p3, p4, ncol=2, heights=c(1, .05))
 ggsave("figures/effect_plot_shrubs.png", p_both, units = "mm", 
-       width = 190, height = 200)
+       width = 170, height = 200)
