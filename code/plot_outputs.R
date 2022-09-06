@@ -227,10 +227,12 @@ p1 <- ggplot(occ_shr_summ, aes(estimate, species)) +
     theme(panel.grid = element_blank(), 
           axis.text = element_text(colour="black"), 
           axis.text.x = element_blank(),
-          axis.title = element_blank()) +
+          axis.title = element_blank(), 
+          plot.title = element_text(size = 11)) +
     scale_x_continuous(limits=xrange_shr, breaks = seq(-4, 4, 1)) +
     geom_vline(xintercept = 0, lty = "longdash") +
-    guides(fill="none", colour="none")
+    guides(fill="none", colour="none") +
+    labs(title = "(a) Effect of shrub abundance")
 
 p2 <- ggplot(occ_esp_summ, aes(estimate, species)) +
     geom_point() +
@@ -240,10 +242,12 @@ p2 <- ggplot(occ_esp_summ, aes(estimate, species)) +
           axis.text = element_text(colour="black"), 
           axis.text.y = element_blank(), 
           axis.text.x = element_blank(),
-          axis.title = element_blank()) +
+          axis.title = element_blank(), 
+          plot.title = element_text(size = 11)) +
     scale_x_continuous(limits=xrange_esp, breaks = seq(-4, 4, 1)) +
     geom_vline(xintercept = 0, lty = "longdash") +
-    guides(fill="none", colour="none")
+    guides(fill="none", colour="none")  +
+    labs(title = "(a) Effect of espeletia abundance")
 
 # effects plots for shrubs
 p3 <- ggplot(feffs_shr, aes(mid, "Average")) + geom_point() +
