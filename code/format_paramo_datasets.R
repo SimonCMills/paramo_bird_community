@@ -45,11 +45,14 @@ pbd2 <- paramo_bird_data %>%
     mutate(site = case_when(site %in% c("Belen", "Tutaza") ~ "La Rusia", 
                             site == "IG" ~ "Iguaque", 
                             TRUE ~ site)) %>%
+    # exclude 3 species of waterbird
     filter(!(species %in% c("Anas_andium", "Tringa_melanoleuca", "Spatula_discors"))) %>%
-    group_by(species) %>%
-    filter(any(Q==1)) %>%
     ungroup %>%
-    filter(!is.na(abu_espeletia))
+    # exclude 3 points that did not have vegetation surveys done
+    filter(!is.na(abu_espeletia)) %>%
+    # only include species that were detected at least once
+    group_by(species) %>%
+    filter(any(Q==1))
 
 df_veg <- pbd2 %>%
     select(point, abu_espeletia, abu_shrub, habitat_type, 
@@ -57,5 +60,12 @@ df_veg <- pbd2 %>%
     unique %>%
     mutate(habitat_sc = ifelse(habitat_type == "A", 1, -1))
 
+pbd3 <- pbd2 %>%
+    select(point, species, phylo = species_eltontraits, 
+           abu_espeletia, abu_shrub, 
+           elev_ALOS, relev, site, cluster, habitat_type,
+           v1:v4, hps1:hps4, obs1:obs4) %>%
+    ungroup
+
 saveRDS(df_veg, "data/paramo_vegetation_dataset.rds")
-saveRDS(pbd2, "data/paramo_bird_dataset.rds")
+saveRDS(pbd3, "data/paramo_bird_dataset.rds")
