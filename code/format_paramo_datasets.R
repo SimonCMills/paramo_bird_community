@@ -64,7 +64,7 @@ pbd3 <- pbd2 %>%
     select(point, species, phylo = species_eltontraits, 
            abu_espeletia, abu_shrub, 
            elev_ALOS, relev, site, cluster, habitat_type,
-           v1:v4, hps1:hps4, obs1:obs4) %>%
+           v1:v4, Q, hps1:hps4, obs1:obs4) %>%
     ungroup
 
 saveRDS(df_veg, "data/paramo_vegetation_dataset.rds")
